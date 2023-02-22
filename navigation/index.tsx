@@ -67,7 +67,7 @@ export default function Navigation({
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      {isSignedIn ? <RootNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }
