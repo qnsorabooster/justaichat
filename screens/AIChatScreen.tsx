@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import * as Clipboard from "expo-clipboard";
+// import * as Clipboard from "expo-clipboard";
 import {
   View,
   StyleSheet,
@@ -63,7 +63,7 @@ const AIChatScreen = () => {
   const handleCopy = useCallback(async (message: any) => {
     const clipboardtext: string = message.toString();
     try {
-      await Clipboard.setStringAsync(clipboardtext);
+      // await Clipboard.setStringAsync(clipboardtext);
       ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
     } catch (error: any) {
       console.log("error", error);
