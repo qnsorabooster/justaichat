@@ -70,7 +70,7 @@ export default function TabOneScreen({
             aichats.map((aichat: any, index: number) => (
               <TouchableOpacity
                 key={index}
-                // onPress={() => navigation.navigate("AIChatScreen")}
+                onPress={() => navigation.navigate("AIChatScreen")}
               >
                 <View style={styles.infoContainer}>
                   <Image
