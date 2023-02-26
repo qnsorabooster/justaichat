@@ -17,7 +17,7 @@ export default function ModalScreen() {
     {
       id: 1,
       name: "Weekly",
-      price: "$5/week",
+      price: "$7/week",
       description: "Access to basic features",
       tagline: "Try it out for a week",
     },
