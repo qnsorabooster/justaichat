@@ -27,6 +27,14 @@ export default function TabTwoScreen({ navigation }: any) {
       "https://play.google.com/store/apps/details?id=com.ayushgupta.ai_chat"
     );
   };
+
+  const privacyPolicy = () => {
+    //privacy policy link
+    Linking.openURL(
+      "https://play.google.com/store/apps/details?id=com.ayushgupta.ai_chat"
+    );
+  };
+
   const handleShareOnWatsapp = async () => {
     //Watsapp share
     try {
@@ -147,6 +155,26 @@ export default function TabTwoScreen({ navigation }: any) {
             <View style={styles.infoTextContainerrateus}>
               <Text style={styles.infoTitle}>
                 Share this app with your friends and family.
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={privacyPolicy}>
+          <View style={styles.infoContainerrateus}>
+            <View style={styles.infoTextContainerrateus}>
+              <Text style={styles.infoTitle}>Privacy Policy</Text>
+              <Text style={styles.infoSubtitle}>
+                Privacy Policy of Just Ai Chat
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={privacyPolicy}>
+          <View style={styles.infoContainerrateus}>
+            <View style={styles.infoTextContainerrateus}>
+              <Text style={styles.infoTitle}>Terms and Service </Text>
+              <Text style={styles.infoSubtitle}>
+                Terms and Service of Just Ai Chat
               </Text>
             </View>
           </View>
