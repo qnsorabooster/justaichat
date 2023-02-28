@@ -11,6 +11,7 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { Session } from "@supabase/supabase-js";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -33,6 +34,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import Constants from "expo-constants";
 
 export default function Navigation({
   colorScheme,
@@ -41,6 +43,7 @@ export default function Navigation({
 }) {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
   const [session, setSession] = useState<Session | null>(null);
+  const stripepublishablekey = Constants?.manifest?.extra?.stripepublishablekey;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -67,7 +70,13 @@ export default function Navigation({
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      {isSignedIn ? <RootNavigator /> : <AuthNavigator />}
+      {isSignedIn ? (
+        <StripeProvider publishableKey={stripepublishablekey}>
+          <RootNavigator />
+        </StripeProvider>
+      ) : (
+        <AuthNavigator />
+      )}
     </NavigationContainer>
   );
 }

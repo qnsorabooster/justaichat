@@ -1,3 +1,4 @@
+import { useStripe } from "@stripe/stripe-react-native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
 import { Text } from "../components/Themed";
 
@@ -37,13 +39,54 @@ export default function ModalScreen() {
       discount: "Save 50%",
     },
   ];
+  const stripe = useStripe();
 
   const handleSelectOption = (option: any) => {
     setSelectedOption(option);
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     // TODO: Implement subscription functionality
+    try {
+      const response = await fetch(
+        "https://justchatsapi.justideas.tech/api/stripe",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: 7,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+        return;
+      }
+      const clientSecret: any = data.clientSecret;
+      const initSheet = await stripe.initPaymentSheet({
+        paymentIntentClientSecret: clientSecret,
+        merchantDisplayName: "JustAIChat",
+      });
+      if (initSheet.error) {
+        ToastAndroid.show(JSON.stringify(initSheet.error), ToastAndroid.SHORT);
+        return;
+      }
+      const presentSheet = await stripe.presentPaymentSheet();
+      if (presentSheet.error) {
+        ToastAndroid.show(
+          JSON.stringify(presentSheet.error),
+          ToastAndroid.SHORT
+        );
+        return;
+      }
+      ToastAndroid.show("Payment Successful", ToastAndroid.SHORT);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
