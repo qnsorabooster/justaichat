@@ -1,8 +1,4 @@
-import {
-  initPaymentSheet,
-  presentPaymentSheet,
-  useStripe,
-} from "@stripe/stripe-react-native";
+import { useStripe } from "@stripe/stripe-react-native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
@@ -46,7 +42,7 @@ export default function ModalScreen() {
       discount: "Save 50%",
     },
   ];
-  const stripe = useStripe();
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   const handleSelectOption = (option: any) => {
     setSelectedOption(option);
