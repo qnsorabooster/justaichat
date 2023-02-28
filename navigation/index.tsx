@@ -43,7 +43,7 @@ export default function Navigation({
 }) {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
   const [session, setSession] = useState<Session | null>(null);
-  const stripepublishablekey = Constants?.manifest?.extra?.stripepublishablekey;
+  const stripepublishablekey = Constants?.manifest?.extra?.stripePublishableKey;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
