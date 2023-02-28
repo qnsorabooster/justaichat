@@ -43,7 +43,6 @@ export default function Navigation({
 }) {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
   const [session, setSession] = useState<Session | null>(null);
-  const stripepublishablekey = Constants?.manifest?.extra?.stripePublishableKey;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -70,13 +69,7 @@ export default function Navigation({
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      {isSignedIn ? (
-        <StripeProvider publishableKey={stripepublishablekey}>
-          <RootNavigator />
-        </StripeProvider>
-      ) : (
-        <AuthNavigator />
-      )}
+      {isSignedIn ? <RootNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }

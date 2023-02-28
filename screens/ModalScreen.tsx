@@ -64,11 +64,11 @@ export default function ModalScreen() {
           : 0,
       }),
     });
-    const { paymentIntent, ephemeralKey, customer, publishableKey } =
+    const { clientSecret, ephemeralKey, customer, publishableKey } =
       await response.json();
 
     return {
-      paymentIntent,
+      paymentIntent: clientSecret,
       ephemeralKey,
       customer,
       publishableKey,
@@ -79,6 +79,8 @@ export default function ModalScreen() {
     const { paymentIntent, ephemeralKey, customer, publishableKey } =
       await fetchPaymentSheetParams();
 
+    console.log(paymentIntent, ephemeralKey, customer, publishableKey);
+
     const { error } = await initPaymentSheet({
       merchantDisplayName: "Justideas",
       customerId: customer,
@@ -87,7 +89,10 @@ export default function ModalScreen() {
       // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
       //methods that complete payment after a delay, like SEPA Debit and Sofort.
       allowsDelayedPaymentMethods: true,
-      defaultBillingDetails: {},
+      // Set `requiredBillingAddressFields` to `full` if you need to collect a full billing
+      defaultBillingDetails: {
+        email: "j@gmail.com",
+      },
     });
     if (!error) {
       console.log("Initialized");
@@ -101,7 +106,9 @@ export default function ModalScreen() {
       return;
     }
     console.log(selectedOption.id);
-    initializePaymentSheet();
+    await initializePaymentSheet();
+
+    await new Promise((resolve) => setTimeout(resolve, 2500));
     // TODO: Implement subscription functionality
     const { error } = await presentPaymentSheet();
 
