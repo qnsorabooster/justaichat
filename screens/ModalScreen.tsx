@@ -1,6 +1,10 @@
-import { useStripe } from "@stripe/stripe-react-native";
+import {
+  initPaymentSheet,
+  presentPaymentSheet,
+  useStripe,
+} from "@stripe/stripe-react-native";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Button,
@@ -10,8 +14,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
+  Alert,
 } from "react-native";
 import { Text } from "../components/Themed";
+
+const API_URL = "https://justchatsapi.justideas.tech/api";
 
 export default function ModalScreen() {
   const [selectedOption, setSelectedOption]: any = useState(null);
@@ -45,47 +52,67 @@ export default function ModalScreen() {
     setSelectedOption(option);
   };
 
-  const handleSubscribe = async () => {
-    // TODO: Implement subscription functionality
-    try {
-      const response = await fetch(
-        "https://justchatsapi.justideas.tech/api/stripe",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: 7,
-          }),
-        }
-      );
+  const fetchPaymentSheetParams = async () => {
+    const response = await fetch(`${API_URL}/payment-sheet`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: selectedOption.id
+          ? selectedOption.id === 1
+            ? 7
+            : selectedOption.id === 2
+            ? 25
+            : 300
+          : 0,
+      }),
+    });
+    const { paymentIntent, ephemeralKey, customer, publishableKey } =
+      await response.json();
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-        return;
-      }
-      const clientSecret: any = data.clientSecret;
-      const initSheet = await stripe.initPaymentSheet({
-        paymentIntentClientSecret: clientSecret,
-        merchantDisplayName: "JustAIChat",
-      });
-      if (initSheet.error) {
-        ToastAndroid.show(JSON.stringify(initSheet.error), ToastAndroid.SHORT);
-        return;
-      }
-      const presentSheet = await stripe.presentPaymentSheet();
-      if (presentSheet.error) {
-        ToastAndroid.show(
-          JSON.stringify(presentSheet.error),
-          ToastAndroid.SHORT
-        );
-        return;
-      }
-      ToastAndroid.show("Payment Successful", ToastAndroid.SHORT);
-    } catch (error) {
-      console.log(error);
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+      publishableKey,
+    };
+  };
+
+  const initializePaymentSheet = async () => {
+    const { paymentIntent, ephemeralKey, customer, publishableKey } =
+      await fetchPaymentSheetParams();
+
+    const { error } = await initPaymentSheet({
+      merchantDisplayName: "Justideas",
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+      //methods that complete payment after a delay, like SEPA Debit and Sofort.
+      allowsDelayedPaymentMethods: true,
+      defaultBillingDetails: {},
+    });
+    if (!error) {
+      console.log("Initialized");
+    }
+  };
+
+  const handleSubscribe = async () => {
+    // initializePaymentSheet();
+    if (!selectedOption) {
+      Alert.alert("Please select a subscription plan");
+      return;
+    }
+    console.log(selectedOption.id);
+    initializePaymentSheet();
+    // TODO: Implement subscription functionality
+    const { error } = await presentPaymentSheet();
+
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      Alert.alert("Success", "Your order is confirmed!");
     }
   };
 
