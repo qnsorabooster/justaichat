@@ -1,11 +1,7 @@
 import { useStripe } from "@stripe/stripe-react-native";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   View,
-  Button,
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -13,11 +9,13 @@ import {
   Alert,
 } from "react-native";
 import { Text } from "../components/Themed";
+import { supabase } from "../config/supabase";
 
 const API_URL = "https://justchatsapi.justideas.tech/api";
 
 export default function ModalScreen() {
   const [selectedOption, setSelectedOption]: any = useState(null);
+  const [user, setUser]: any = useState(null);
   const subscriptionOptions = [
     {
       id: 1,
@@ -46,6 +44,14 @@ export default function ModalScreen() {
 
   const handleSelectOption = (option: any) => {
     setSelectedOption(option);
+  };
+
+  const getUser = async () => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setUser(session.user);
+      }
+    });
   };
 
   const fetchPaymentSheetParams = async () => {
@@ -91,7 +97,7 @@ export default function ModalScreen() {
       allowsDelayedPaymentMethods: true,
       // Set `requiredBillingAddressFields` to `full` if you need to collect a full billing
       defaultBillingDetails: {
-        email: "j@gmail.com",
+        email: user?.email,
       },
     });
     if (!error) {
