@@ -46,6 +46,10 @@ export default function ModalScreen() {
     setSelectedOption(option);
   };
 
+  useEffect(() => {
+    getUser();
+  }, [user]);
+
   const getUser = async () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
@@ -68,6 +72,7 @@ export default function ModalScreen() {
             ? 25
             : 300
           : 0,
+        userid: user?.id,
       }),
     });
     const { clientSecret, ephemeralKey, customer, publishableKey } =
@@ -99,6 +104,8 @@ export default function ModalScreen() {
       defaultBillingDetails: {
         email: user?.email,
       },
+      // add metadata here if you want to
+      style: "alwaysDark",
     });
     if (!error) {
       console.log("Initialized");
@@ -111,7 +118,14 @@ export default function ModalScreen() {
       Alert.alert("Please select a subscription plan");
       return;
     }
+
+    if (!user) {
+      ToastAndroid.show("Please wait", ToastAndroid.SHORT);
+      return;
+    }
+    //take wait if user is not logged in
     console.log(selectedOption.id);
+
     await initializePaymentSheet();
 
     await new Promise((resolve) => setTimeout(resolve, 2500));
