@@ -32,7 +32,7 @@ const AIChatScreen = () => {
           .from("messages")
           .select("user_message, ai_message")
           .eq("userid", user?.id)
-          .order("created_at", { ascending: false })
+          .order("created_at", { ascending: true })
           .limit(20);
 
         if (error) throw error;
@@ -58,7 +58,7 @@ const AIChatScreen = () => {
     if (user) {
       fetchMessages();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (messages.length > 0) {
