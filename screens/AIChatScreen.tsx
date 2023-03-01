@@ -82,7 +82,40 @@ const AIChatScreen = () => {
     }
   };
 
+  const CheckMePremium = async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("pro")
+      .eq("id", user?.id)
+      .single();
+    if (error) throw error;
+    if (data.pro === true) {
+      return true;
+    } else {
+      const { data, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("userid", user.id)
+        .order("created_at", { ascending: true });
+      if (error) throw error;
+      if (data.length > 10) {
+        return true;
+      } else {
+        ToastAndroid.show(
+          "You need to be a premium member to use this feature",
+          ToastAndroid.SHORT
+        );
+        return false;
+      }
+    }
+  };
+
   const getAIResponse = async (userMessage: any) => {
+    const check = await CheckMePremium();
+    if (check === false) {
+      return;
+    }
+
     // replace this with your AI service that provides a response
     try {
       const response = await fetch(
