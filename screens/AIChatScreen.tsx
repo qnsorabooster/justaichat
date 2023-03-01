@@ -32,7 +32,7 @@ const AIChatScreen = () => {
           .from("messages")
           .select("user_message, ai_message")
           .eq("userid", user?.id)
-          .order("created_at", { ascending: true })
+          .order("created_at", { ascending: false })
           .limit(10);
 
         if (error) throw error;
@@ -208,7 +208,7 @@ const AIChatScreen = () => {
           value={inputText}
           onChangeText={setInputText}
           style={styles.input}
-          placeholder="Type a message..."
+          placeholder="Ask Your Questions to AI..."
           onKeyPress={handleKeyPress}
         />
         <Button title="Send" onPress={sendMessage} color="#000" />
