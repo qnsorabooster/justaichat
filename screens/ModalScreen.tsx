@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Alert,
+  Linking,
 } from "react-native";
 import { Text } from "../components/Themed";
 import { supabase } from "../config/supabase";
@@ -41,6 +42,11 @@ export default function ModalScreen() {
     },
   ];
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+
+  const handleUsPayment = async () => {
+    //open link
+    Linking.openURL("https://tawk.to/justaichat");
+  };
 
   const handleSelectOption = (option: any) => {
     setSelectedOption(option);
@@ -145,6 +151,15 @@ export default function ModalScreen() {
         <Text style={styles.title}>
           Unlock the full potential of JustAIChat
         </Text>
+        <View style={styles.usContainer}>
+          <TouchableOpacity style={styles.usButton} onPress={handleUsPayment}>
+            <Text style={styles.usButtonText}>
+              Please click the following link to contact are Live Chat Agent
+              regarding non-Indian plans
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.cardContainer}>
           {subscriptionOptions.map((option) => (
             <TouchableOpacity
@@ -287,5 +302,29 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontStyle: "normal",
     fontSize: 22,
+  },
+  usContainer: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  usButton: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "90%",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  usButtonText: {
+    color: "#000",
+    fontWeight: "bold",
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    textAlign: "center",
+    fontSize: 11,
   },
 });
