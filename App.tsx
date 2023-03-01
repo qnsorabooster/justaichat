@@ -12,7 +12,7 @@ export default function App() {
   const colorScheme = useColorScheme();
   const stripepublishablekey = Constants?.manifest?.extra?.stripePublishableKey;
 
-  console.log("stripepublishablekey", stripepublishablekey);
+  // console.log("stripepublishablekey", stripepublishablekey);
 
   if (!isLoadingComplete) {
     return null;
