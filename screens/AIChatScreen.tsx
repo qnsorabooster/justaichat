@@ -139,10 +139,11 @@ const AIChatScreen = () => {
 
       // Update the messages list with the user message and bot response
       setMessages([
-        ...messages.slice(0, -1),
+        ...messages,
         { message: userMessage, sender: "user" },
         { message: botMessage, sender: "ai" },
       ]);
+
       // Store the user message and bot response in the database
       storeAIResponse(userMessage, botMessage);
     } catch (error) {
