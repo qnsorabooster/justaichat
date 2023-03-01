@@ -203,7 +203,7 @@ const AIChatScreen = () => {
         ref={flatListRef}
         data={messages}
         renderItem={({ item }) => (
-          <TouchableOpacity onLongPress={() => handleCopy(item.message)}>
+          <TouchableOpacity onPress={() => handleCopy(item.message)}>
             <View
               style={[
                 item.sender === "user" ? styles.userMessage : styles.aiMessage,
