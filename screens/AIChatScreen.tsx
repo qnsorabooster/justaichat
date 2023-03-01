@@ -26,6 +26,38 @@ const AIChatScreen = () => {
   }, []);
 
   useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("messages")
+          .select("user_message, ai_message")
+          .eq("userid", user?.id)
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (error) throw error;
+
+        const messages = data.flatMap((message: any) => [
+          {
+            message: message.user_message,
+            sender: "user",
+          },
+          {
+            message: message.ai_message,
+            sender: "ai",
+          },
+        ]);
+
+        setMessages(messages.reverse());
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchMessages();
+  }, []);
+
+  useEffect(() => {
     if (messages.length > 0) {
       flatListRef.current.scrollToEnd({ animated: true });
     }
@@ -70,10 +102,30 @@ const AIChatScreen = () => {
 
       const data = await response.json();
       const aitext = data["text"];
+      // store message data that way that message time not incressing
+      storeAIResponse(userMessage, aitext);
       return aitext;
     } catch (error) {
       console.log(error);
       return "Sorry, I am having some trouble. Please try again later.";
+    }
+  };
+
+  const storeAIResponse = async (userMessage: any, botMessage: any) => {
+    // store the user message and the bot response in the database supabase
+    try {
+      const { data, error } = await supabase.from("messages").insert([
+        {
+          userid: user?.id,
+          user_message: userMessage,
+          ai_message: botMessage,
+          aichatid: 1,
+          created_at: new Date(),
+        },
+      ]);
+      if (error) throw error;
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -154,7 +206,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     marginRight: 50,
-    maxWidth: "70%",
+    maxWidth: "90%",
     borderRadius: 10,
   },
   aiMessage: {
@@ -163,7 +215,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     marginLeft: 50,
-    maxWidth: "70%",
+    maxWidth: "90%",
     borderRadius: 10,
   },
   typing: {
