@@ -54,7 +54,10 @@ const AIChatScreen = () => {
       }
     };
 
-    fetchMessages();
+    //wait for user to be set
+    if (user) {
+      fetchMessages();
+    }
   }, []);
 
   useEffect(() => {
@@ -102,8 +105,6 @@ const AIChatScreen = () => {
 
       const data = await response.json();
       const aitext = data["text"];
-      // store message data that way that message time not incressing
-      storeAIResponse(userMessage, aitext);
       return aitext;
     } catch (error) {
       console.log(error);
@@ -129,19 +130,24 @@ const AIChatScreen = () => {
     }
   };
 
-  const sendBotResponse = (userMessage: any) => {
-    setTimeout(async () => {
+  const sendBotResponse = async (userMessage: any) => {
+    try {
       setMessages([...messages, { message: "Typing...", sender: "AI" }]);
-      // replace this with your AI service that provides a response
+
+      // Call the API to get the bot's response
       const botMessage = await getAIResponse(userMessage);
-      setTimeout(() => {
-        setMessages([
-          ...messages.slice(0, -1),
-          { message: userMessage, sender: "user" },
-          { message: botMessage, sender: "ai" },
-        ]);
-      }, 1000);
-    }, 1000);
+
+      // Update the messages list with the user message and bot response
+      setMessages([
+        ...messages.slice(0, -1),
+        { message: userMessage, sender: "user" },
+        { message: botMessage, sender: "ai" },
+      ]);
+      // Store the user message and bot response in the database
+      storeAIResponse(userMessage, botMessage);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
