@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Text,
   View,
@@ -7,8 +7,10 @@ import {
   FlatList,
   StyleSheet,
   ToastAndroid,
+  TouchableOpacity,
 } from "react-native";
 import { supabase } from "../config/supabase";
+import * as Clipboard from "expo-clipboard";
 
 const AIChatScreen = () => {
   const [inputText, setInputText] = useState("");
@@ -65,6 +67,17 @@ const AIChatScreen = () => {
       flatListRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
+
+  const handleCopy = useCallback(async (message: any) => {
+    const clipboardtext: string = message.toString();
+    try {
+      await Clipboard.setStringAsync(clipboardtext);
+      ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
+    } catch (error: any) {
+      console.log("error", error);
+      ToastAndroid.show("Error copying to clipboard", ToastAndroid.SHORT);
+    }
+  }, []);
 
   const sendMessage = () => {
     if (inputText.trim() === "") {
@@ -190,14 +203,16 @@ const AIChatScreen = () => {
         ref={flatListRef}
         data={messages}
         renderItem={({ item }) => (
-          <View
-            style={[
-              item.sender === "user" ? styles.userMessage : styles.aiMessage,
-              item.isTyping && styles.typing,
-            ]}
-          >
-            <Text>{item.message}</Text>
-          </View>
+          <TouchableOpacity onLongPress={() => handleCopy(item.message)}>
+            <View
+              style={[
+                item.sender === "user" ? styles.userMessage : styles.aiMessage,
+                item.isTyping && styles.typing,
+              ]}
+            >
+              <Text>{item.message}</Text>
+            </View>
+          </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index.toString()}
         style={styles.messagesContainer}
