@@ -211,7 +211,7 @@ const AIChatScreen = () => {
           placeholder="Type a message..."
           onKeyPress={handleKeyPress}
         />
-        <Button title="Send" onPress={sendMessage} />
+        <Button title="Send" onPress={sendMessage} color="#000" />
       </View>
     </View>
   );
@@ -231,14 +231,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: "#ccc",
+    backgroundColor: "#ffe4c4",
   },
   input: {
     flex: 1,
     marginRight: 10,
-    padding: 5,
+    padding: 7,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderRadius: 6,
+    backgroundColor: "#fff",
   },
   userMessage: {
     backgroundColor: "#eee",
