@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     marginRight: 50,
-    maxWidth: "90%",
+    maxWidth: "95%",
     borderRadius: 10,
   },
   aiMessage: {
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     marginLeft: 50,
-    maxWidth: "90%",
+    maxWidth: "95%",
     borderRadius: 10,
   },
   typing: {
