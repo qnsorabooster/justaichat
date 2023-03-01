@@ -33,22 +33,22 @@ const AIChatScreen = () => {
           .select("user_message, ai_message")
           .eq("userid", user?.id)
           .order("created_at", { ascending: true })
-          .limit(20);
+          .limit(10);
 
         if (error) throw error;
 
-        const messages = data.flatMap((message: any) => [
-          {
-            message: message.user_message,
-            sender: "user",
-          },
+        const message = data.flatMap((message: any) => [
           {
             message: message.ai_message,
             sender: "ai",
           },
+          {
+            message: message.user_message,
+            sender: "user",
+          },
         ]);
 
-        setMessages(messages.reverse());
+        setMessages(message.reverse());
       } catch (error) {
         console.log("error", error);
       }
@@ -137,7 +137,7 @@ const AIChatScreen = () => {
       // Call the API to get the bot's response
       const botMessage = await getAIResponse(userMessage);
 
-      // Update the messages list with the user message and bot response
+      // Update the messages list with the user message and bot response call fetchMessages
       setMessages([
         ...messages,
         { message: userMessage, sender: "user" },
@@ -168,7 +168,7 @@ const AIChatScreen = () => {
         )}
         keyExtractor={(item, index) => index.toString()}
         style={styles.messagesContainer}
-        inverted
+        // inverted // show the latest message at the bottom
       />
       <View style={styles.inputContainer}>
         <TextInput
