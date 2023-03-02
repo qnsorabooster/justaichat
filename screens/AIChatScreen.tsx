@@ -40,7 +40,6 @@ const AIChatScreen = () => {
           .limit(10);
 
         if (error) throw error;
-        const regex = /```([\s\S]*?)```/;
 
         const message = data.flatMap((message: any) => [
           {
@@ -161,7 +160,19 @@ const AIChatScreen = () => {
       const data = await response.json();
       const aitext = data["text"];
       const regex = /```([\s\S]*?)```/;
-      const match = regex.exec(aitext);
+      const htmlCode = aitext.match(regex)[1];
+      const formattedText = aitext.replace(
+        regex,
+        `<Text style={
+          {
+            backgroundColor: "#f5f5f5",
+            padding: 10,
+            borderRadius: 10,
+            fontFamily: "monospace",
+            fontSize: 16,
+          }
+        }>${htmlCode}</Text>`
+      );
 
       return aitext;
     } catch (error) {
@@ -340,6 +351,16 @@ const styles = StyleSheet.create({
     color: "#0000ff",
     alignSelf: "center",
     padding: 10,
+  },
+  code: {
+    backgroundColor: "#eee",
+    alignSelf: "flex-start",
+    padding: 10,
+    margin: 5,
+    marginLeft: 50,
+    maxWidth: "95%",
+    borderRadius: 10,
+    color: "#000",
   },
 });
 
