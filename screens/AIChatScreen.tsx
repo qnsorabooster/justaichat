@@ -212,21 +212,26 @@ const AIChatScreen = () => {
     try {
       const { data, error } = await supabase
         .from("messages")
-        .select("user_message, ai_message")
+        .select("user_message, ai_message, created_at")
         .eq("aichatid", 1)
         .order("created_at", { ascending: false })
         .range(messages.length, messages.length + pageSize - 1);
 
       if (error) throw error;
 
-      const newMessages = data
-        .flatMap((message: any) => [
-          { message: message.ai_message, sender: "ai" },
-          { message: message.user_message, sender: "user" },
-        ])
-        .reverse();
+      const newMessages = data.flatMap((message: any) => [
+        { message: message.ai_message, sender: "ai", time: message.created_at },
+        {
+          message: message.user_message,
+          sender: "user",
+          time: message.created_at,
+        },
+      ]);
 
-      setMessages((prevMessages: any) => [...prevMessages, ...newMessages]);
+      setMessages((prevMessages: any) => [
+        ...newMessages.reverse(),
+        ...prevMessages,
+      ]);
     } catch (error) {
       console.log("Error loading more messages:", error);
       ToastAndroid.show("Error loading more messages", ToastAndroid.SHORT);
