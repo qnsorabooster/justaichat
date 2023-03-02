@@ -40,6 +40,7 @@ const AIChatScreen = () => {
           .limit(10);
 
         if (error) throw error;
+        const regex = /```([\s\S]*?)```/;
 
         const message = data.flatMap((message: any) => [
           {
@@ -159,6 +160,9 @@ const AIChatScreen = () => {
 
       const data = await response.json();
       const aitext = data["text"];
+      const regex = /```([\s\S]*?)```/;
+      const match = regex.exec(aitext);
+
       return aitext;
     } catch (error) {
       console.log(error);
