@@ -65,10 +65,14 @@ const AIChatScreen = () => {
   }, [user]);
 
   useEffect(() => {
+    Scrolling();
+  }, [messages]);
+
+  const Scrolling = () => {
     if (messages.length > 0) {
       flatListRef.current.scrollToEnd({ animated: true });
     }
-  }, [messages]);
+  };
 
   const handleCopy = useCallback(async (message: any) => {
     const clipboardtext: string = message.toString();
@@ -183,6 +187,8 @@ const AIChatScreen = () => {
   const sendBotResponse = async (userMessage: any) => {
     try {
       setMessages([...messages, { message: "Typing...", sender: "AI" }]);
+
+      Scrolling();
 
       // Call the API to get the bot's response
       const botMessage = await getAIResponse(userMessage);
