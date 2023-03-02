@@ -243,7 +243,6 @@ const AIChatScreen = () => {
       <TouchableOpacity onPress={loadMoreMessages}>
         <Text style={styles.loadMore}>Load More</Text>
       </TouchableOpacity>
-
       <FlatList
         ref={flatListRef}
         data={messages}
