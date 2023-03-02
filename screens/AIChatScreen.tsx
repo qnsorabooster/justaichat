@@ -17,6 +17,8 @@ const AIChatScreen = () => {
   const [messages, setMessages]: any = useState([]);
   const flatListRef = useRef<any>();
   const [user, setUser] = useState<any>(null);
+  const [pageSize, setPageSize] = useState(10);
+  const [buttoniddisabled, setButtoniddisabled] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -80,8 +82,10 @@ const AIChatScreen = () => {
   }, []);
 
   const sendMessage = () => {
+    setButtoniddisabled(true);
     if (inputText.trim() === "") {
       ToastAndroid.show("Please enter a message", ToastAndroid.SHORT);
+      setButtoniddisabled(false);
       return;
     }
     setMessages([...messages, { message: inputText, sender: "user" }]);
@@ -189,6 +193,7 @@ const AIChatScreen = () => {
         { message: userMessage, sender: "user" },
         { message: botMessage, sender: "ai" },
       ]);
+      setButtoniddisabled(false);
 
       // Store the user message and bot response in the database
       storeAIResponse(userMessage, botMessage);
@@ -197,8 +202,37 @@ const AIChatScreen = () => {
     }
   };
 
+  const loadMoreMessages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("messages")
+        .select("user_message, ai_message")
+        .eq("aichatid", 1)
+        .order("created_at", { ascending: false })
+        .range(messages.length, messages.length + pageSize - 1);
+
+      if (error) throw error;
+
+      const newMessages = data
+        .flatMap((message: any) => [
+          { message: message.ai_message, sender: "ai" },
+          { message: message.user_message, sender: "user" },
+        ])
+        .reverse();
+
+      setMessages((prevMessages: any) => [...prevMessages, ...newMessages]);
+    } catch (error) {
+      console.log("Error loading more messages:", error);
+      ToastAndroid.show("Error loading more messages", ToastAndroid.SHORT);
+    }
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={loadMoreMessages}>
+        <Text style={styles.loadMore}>Load More</Text>
+      </TouchableOpacity>
+
       <FlatList
         ref={flatListRef}
         data={messages}
@@ -226,7 +260,12 @@ const AIChatScreen = () => {
           placeholder="Ask Your Questions to AI..."
           onKeyPress={handleKeyPress}
         />
-        <Button title="Send" onPress={sendMessage} color="#000" />
+        <Button
+          title="Send"
+          onPress={sendMessage}
+          color="#000"
+          disabled={buttoniddisabled}
+        />
       </View>
     </View>
   );
@@ -277,6 +316,16 @@ const styles = StyleSheet.create({
   },
   typing: {
     backgroundColor: "#eee",
+  },
+  loadMore: {
+    color: "#0000ff",
+    alignSelf: "center",
+    padding: 10,
+  },
+  loadMoreMessages: {
+    color: "#0000ff",
+    alignSelf: "center",
+    padding: 10,
   },
 });
 
