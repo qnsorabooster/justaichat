@@ -33,6 +33,9 @@ export default {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
+      config: {
+        googleMobileAdsAppId: "ca-app-pub-6156225952846626~4370119109",
+      },
     },
     web: {
       favicon: "./assets/images/favicon.png",
