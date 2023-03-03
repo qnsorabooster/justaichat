@@ -159,20 +159,6 @@ const AIChatScreen = () => {
 
       const data = await response.json();
       const aitext = data["text"];
-      const regex = /```([\s\S]*?)```/;
-      const htmlCode = aitext.match(regex)[1];
-      const formattedText = aitext.replace(
-        regex,
-        `<Text style={
-          {
-            backgroundColor: "#f5f5f5",
-            padding: 10,
-            borderRadius: 10,
-            fontFamily: "monospace",
-            fontSize: 16,
-          }
-        }>${htmlCode}</Text>`
-      );
 
       return aitext;
     } catch (error) {
