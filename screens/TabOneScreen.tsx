@@ -97,16 +97,16 @@ export default function TabOneScreen({
                 </View>
               </TouchableOpacity>
             ))}
-          <View style={styles.banners}>
-            <BannerAd
-              unitId={adUnitId}
-              size={BannerAdSize.MEDIUM_RECTANGLE}
-              requestOptions={{
-                requestNonPersonalizedAdsOnly: true,
-              }}
-            />
-          </View>
         </ScrollView>
+        <View style={styles.banners}>
+          <BannerAd
+            unitId={adUnitId}
+            size={BannerAdSize.MEDIUM_RECTANGLE}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+          />
+        </View>
       </View>
     );
   }
@@ -203,7 +203,8 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 10,
     backgroundColor: "#f5f5f5",
   },
 });
