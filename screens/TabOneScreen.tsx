@@ -9,6 +9,11 @@ import {
 import { Text, View } from "../components/Themed";
 import { supabase } from "../config/supabase";
 import { RootTabScreenProps } from "../types";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
 
 export default function TabOneScreen({
   navigation,
@@ -17,6 +22,10 @@ export default function TabOneScreen({
   const [messages, setMessages]: any = useState([]);
   const [aichats, setAichats]: any = useState([]);
   const [newChat, setNewChat] = useState("");
+
+  const adUnitId = __DEV__
+    ? TestIds.BANNER
+    : "ca-app-pub-6156225952846626/3373296856";
 
   useEffect(() => {
     //get user from supabase
@@ -88,6 +97,15 @@ export default function TabOneScreen({
                 </View>
               </TouchableOpacity>
             ))}
+          <View style={styles.banners}>
+            <BannerAd
+              unitId={adUnitId}
+              size={BannerAdSize.BANNER}
+              requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+              }}
+            />
+          </View>
         </ScrollView>
       </View>
     );
@@ -180,5 +198,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+  },
+  banners: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    backgroundColor: "#f5f5f5",
   },
 });
