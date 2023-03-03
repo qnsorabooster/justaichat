@@ -100,7 +100,7 @@ export default function TabOneScreen({
           <View style={styles.banners}>
             <BannerAd
               unitId={adUnitId}
-              size={BannerAdSize.BANNER}
+              size={BannerAdSize.MEDIUM_RECTANGLE}
               requestOptions={{
                 requestNonPersonalizedAdsOnly: true,
               }}
