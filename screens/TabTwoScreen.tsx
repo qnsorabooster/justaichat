@@ -41,6 +41,11 @@ export default function TabTwoScreen({ navigation }: any) {
     Linking.openURL("https://tawk.to/justaichat");
   };
 
+  const Feedback = () => {
+    //feedback link
+    Linking.openURL("https://justaichat.canny.io/");
+  };
+
   const handleShareOnWatsapp = async () => {
     //Watsapp share
     try {
@@ -191,6 +196,16 @@ export default function TabTwoScreen({ navigation }: any) {
               <Text style={styles.infoTitle}>Importent Note </Text>
               <Text style={styles.infoSubtitle}>
                 Please Note All Messages is genrated by AI and not by any human
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={Feedback}>
+          <View style={styles.infoContainerrateus}>
+            <View style={styles.infoTextContainerrateus}>
+              <Text style={styles.infoTitle}>New Feature Requeast</Text>
+              <Text style={styles.infoSubtitle}>
+                Feedback and New Feature Requeast
               </Text>
             </View>
           </View>
