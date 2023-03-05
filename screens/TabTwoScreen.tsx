@@ -23,16 +23,17 @@ export default function TabTwoScreen({ navigation }: any) {
   const [shared, setShared] = useState(false);
   const rateUsOnAppStore = () => {
     //play store
-    Linking.openURL(
-      "https://play.google.com/store/apps/details?id=com.ayushgupta.ai_chat"
-    );
+    Linking.openURL("https://www.justideas.tech/justaichat-your-ai-assistant/");
   };
 
   const privacyPolicy = () => {
     //privacy policy link
-    Linking.openURL(
-      "https://play.google.com/store/apps/details?id=com.ayushgupta.ai_chat"
-    );
+    Linking.openURL("https://www.justideas.tech/privacy-policy/");
+  };
+
+  const TermsandConditions = () => {
+    //terms and conditions link
+    Linking.openURL("https://www.justideas.tech/terms-and-conditions/");
   };
 
   const handleShareOnWatsapp = async () => {
@@ -40,7 +41,7 @@ export default function TabTwoScreen({ navigation }: any) {
     try {
       const result = await Share.share({
         message:
-          "Hey there! I just discovered this amazing app that I think you'll love. It's packed with features that make [insert app purpose here] so much easier and more fun. Check it out for yourself and let me know what you think! #JustAiChat #JustAiChatApp Click here to download the app https://play.google.com/store/apps/details?id=com.ayushgupta.ai_chat",
+          "Hey there! I just discovered this amazing app that I think you'll love. It's packed with features that make [insert app purpose here] so much easier and more fun. Check it out for yourself and let me know what you think! #JustAiChat #JustAiChatApp Click here to download the app https://www.justideas.tech/justaichat-your-ai-assistant/",
       });
 
       if (result.action === Share.sharedAction) {
@@ -175,6 +176,16 @@ export default function TabTwoScreen({ navigation }: any) {
               <Text style={styles.infoTitle}>Terms and Service </Text>
               <Text style={styles.infoSubtitle}>
                 Terms and Service of Just Ai Chat
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.infoContainerrateus}>
+            <View style={styles.infoTextContainerrateus}>
+              <Text style={styles.infoTitle}>Importent Note </Text>
+              <Text style={styles.infoSubtitle}>
+                Please Note All Messages is genrated by AI and not by any human
               </Text>
             </View>
           </View>
