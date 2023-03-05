@@ -200,6 +200,7 @@ const AIChatScreen = () => {
         { message: userMessage, sender: "user" },
         { message: botMessage, sender: "ai" },
       ]);
+      Scrolling();
       setButtoniddisabled(false);
 
       // Store the user message and bot response in the database
