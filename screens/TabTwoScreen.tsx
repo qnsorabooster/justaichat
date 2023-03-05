@@ -36,6 +36,11 @@ export default function TabTwoScreen({ navigation }: any) {
     Linking.openURL("https://www.justideas.tech/terms-and-conditions/");
   };
 
+  const ChatWithUS = () => {
+    //chat with us link
+    Linking.openURL("https://tawk.to/justaichat");
+  };
+
   const handleShareOnWatsapp = async () => {
     //Watsapp share
     try {
@@ -170,7 +175,7 @@ export default function TabTwoScreen({ navigation }: any) {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={privacyPolicy}>
+        <TouchableOpacity onPress={TermsandConditions}>
           <View style={styles.infoContainerrateus}>
             <View style={styles.infoTextContainerrateus}>
               <Text style={styles.infoTitle}>Terms and Service </Text>
@@ -186,6 +191,16 @@ export default function TabTwoScreen({ navigation }: any) {
               <Text style={styles.infoTitle}>Importent Note </Text>
               <Text style={styles.infoSubtitle}>
                 Please Note All Messages is genrated by AI and not by any human
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={ChatWithUS}>
+          <View style={styles.infoContainerrateus}>
+            <View style={styles.infoTextContainerrateus}>
+              <Text style={styles.infoTitle}>24/7 Support </Text>
+              <Text style={styles.infoSubtitle}>
+                Chat With Us 24/7 (Just Ai Chat Support Team Not AI)
               </Text>
             </View>
           </View>
